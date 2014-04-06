@@ -82,22 +82,19 @@ func traverse(dir string) (files [][2]string) {
 	}
 
 	for _, file := range dirData {
+		if fname := file.Name(); fname[0] != '.' {
 
-		fname := file.Name()
-		if fname[0] == '.' {
-			continue
-		}
-
-		if file.IsDir() {
-			files = append(files, traverse(dir+"/"+fname)...)
-		} else {
-			name := strings.ToLower(fname)
-			idx := strings.LastIndex(name, ".")
-
-			if idx != -1 && len(name)-idx <= 5 {
-				files = append(files, [2]string{dir + "/" + fname, name[0:idx]})
+			if file.IsDir() {
+				files = append(files, traverse(dir+"/"+fname)...)
 			} else {
-				files = append(files, [2]string{dir + "/" + fname, name})
+				name := strings.ToLower(fname)
+				idx := strings.LastIndex(name, ".")
+
+				if idx != -1 && len(name)-idx <= 5 {
+					files = append(files, [2]string{dir + "/" + fname, name[0:idx]})
+				} else {
+					files = append(files, [2]string{dir + "/" + fname, name})
+				}
 			}
 		}
 	}
