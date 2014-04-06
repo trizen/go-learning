@@ -98,14 +98,12 @@ func escapeQuot(str string) string {
 
 func main() {
 
-	var dir string
-	if len(os.Args) > 1 {
-		dir = os.Args[1]
-	} else {
+	if len(os.Args) != 2 {
 		os.Stderr.Write([]byte("usage: " + os.Args[0] + " [dir]\n"))
 		os.Exit(1)
 	}
 
+	dir := os.Args[1]
 	content := readdir(dir)
 	thisDir := xmlEscape(dir)
 	qEscapedDir := escapeQuot(thisDir)
