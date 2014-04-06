@@ -43,7 +43,6 @@ package main
 
 import (
 	"encoding/xml"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -103,8 +102,8 @@ func main() {
 	if len(os.Args) > 1 {
 		dir = os.Args[1]
 	} else {
-		fmt.Fprintln(os.Stderr, "usage:", os.Args[0], "[dir]")
-		return
+		os.Stderr.Write([]byte("usage: " + os.Args[0] + " [dir]\n"))
+		os.Exit(1)
 	}
 
 	content := readdir(dir)
@@ -112,31 +111,31 @@ func main() {
 	qEscapedDir := escapeQuot(thisDir)
 	escapedProgramName := xmlEscape(os.Args[0])
 
-	fmt.Print(
+	os.Stdout.Write([]byte(
 		"<openbox_pipe_menu><item label=\"Browse here...\">" +
 			"<action name=\"Execute\"><execute>" + CMD + " " + QUOT + qEscapedDir + QUOT + "</execute></action>" +
-			"</item><separator/>")
+			"</item><separator/>"))
 
 	for _, name := range content.files {
 		escapedName := xmlEscape(name)
 
-		fmt.Print(
+		os.Stdout.Write([]byte(
 			"<item label=\"" + escapedName + "\">" +
 				"<action name=\"Execute\">" +
 				"<execute>" + CMD + " " + QUOT + qEscapedDir + "/" + escapeQuot(escapedName) + QUOT + "</execute>" +
 				"</action>" +
-				"</item>")
+				"</item>"))
 	}
 
 	for _, name := range content.dirs {
 		escapedName := xmlEscape(name)
 
-		fmt.Print(
+		os.Stdout.Write([]byte(
 			"<menu id=\"" + thisDir + "/" + escapedName + "\"" +
 				" label=\"" + escapedName + "\"" +
 				" execute=\"" + escapedProgramName + " " + QUOT + qEscapedDir + "/" + escapeQuot(escapedName) + QUOT +
-				"\"/>")
+				"\"/>"))
 	}
 
-	fmt.Print("</openbox_pipe_menu>\n")
+	os.Stdout.Write([]byte("</openbox_pipe_menu>\n"))
 }
