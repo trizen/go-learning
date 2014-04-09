@@ -11,9 +11,10 @@ func getContent(url string, cs chan string) {
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "[%s]: %s\n", err, url)
+	} else {
+		defer resp.Body.Close()
 	}
 
-	defer resp.Body.Close()
 	cs <- url
 }
 
