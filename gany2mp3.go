@@ -47,9 +47,8 @@ import (
 )
 
 func executeCmd(channel chan string, name string, arg []string) {
-	cmd := exec.Command(name, arg...)
-	if err := cmd.Run(); err != nil {
-		fmt.Fprintln(os.Stdout, err)
+	if err := exec.Command(name, arg...).Run(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
 	}
 	channel <- "."
 }
@@ -59,13 +58,12 @@ func main() {
 	const outputFormat = "mp3"
 
 	const ffmpegCmd = "ffmpeg"
-
 	ffmpegArg := []string{"-y", "-vn", "-ac", "2", "-ab", "192K", "-ar", "48000", "-f", outputFormat}
 
 	var outputDir string
 	var maxThreads int
 
-	// Get the flags
+	// Command-line flags
 	flag.StringVar(&outputDir, "o", ".", "put converted files in this directory")
 	flag.IntVar(&maxThreads, "t", 2, "the number of threads used for conversion")
 	flag.Parse()
