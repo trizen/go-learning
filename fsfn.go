@@ -63,7 +63,7 @@ func alikeStr(x, y string) bool {
 
 	for i := 0; i <= diff; i++ {
 		for j := i; j <= diff; j++ {
-			if strings.Index(y, x[i:i+(min+j-i)]) != -1 {
+			if strings.Index(y, x[i:min+j]) != -1 {
 				return true
 			}
 		}
@@ -91,9 +91,9 @@ func traverse(dir string) (files [][2]string) {
 				idx := strings.LastIndex(name, ".")
 
 				if idx != -1 && len(name)-idx <= 5 {
-					files = append(files, [2]string{dir + "/" + fname, name[0:idx]})
+					files = append(files, [...]string{dir + "/" + fname, name[0:idx]})
 				} else {
-					files = append(files, [2]string{dir + "/" + fname, name})
+					files = append(files, [...]string{dir + "/" + fname, name})
 				}
 			}
 		}
