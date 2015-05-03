@@ -119,21 +119,13 @@ func arithmethic_decoding(num *big.Int, pow *big.Int, freq map[byte]int64) strin
         base += v
     }
 
-    // Character range
-    r := asciibet()
-
     // Create the cumulative frequency table
     cf := cumulative_freq(freq)
 
     // Create the dictionary
     dict := make(map[int64]byte)
-    j := int64(0)
-    for i := range r {
-        c := r[i]
-        if v, ok := freq[c]; ok {
-            dict[j] = c
-            j += v
-        }
+    for k, v := range cf {
+        dict[v] = k;
     }
 
     // Fill the gaps in the dictionary
