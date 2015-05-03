@@ -26,7 +26,7 @@ func main() {
 	cur_year := t.Year()
 
 	cur_mon_name := fmt.Sprintf("%s", t.Month())
-	fmt.Printf("%*s\n%s\n", 11+(5+len(cur_mon_name))/2, fmt.Sprintf("%s %d", cur_mon_name, cur_year), "Su Mo Tu We Th Fr Sa")
+	fmt.Printf("%*s\n%s\n", (20+5+len(cur_mon_name))/2, fmt.Sprintf("%s %d", cur_mon_name, cur_year), "Su Mo Tu We Th Fr Sa")
 
 	if cur_year%400 == 0 || cur_year%4 == 0 && cur_year%100 != 0 {
 		mons[2] = 29

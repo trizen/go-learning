@@ -38,7 +38,7 @@ func cumulative_freq(freq map[byte]int64) map[byte]int64 {
 func arithmethic_coding(str string) (*big.Int, *big.Int, map[byte]int64) {
 
     // Convert the string into a slice of bytes
-    chars := []byte(str);
+    chars := []byte(str)
 
     // The frequency characters
     freq := make(map[byte]int64)
@@ -85,14 +85,11 @@ func arithmethic_coding(str string) (*big.Int, *big.Int, map[byte]int64) {
     U.Set(L)
     U.Add(U, pf)
 
-    diff := big.NewInt(0)
-    diff.Sub(U, L)
-
     bigOne := big.NewInt(1)
     bigZero := big.NewInt(0)
     bigTen := big.NewInt(10)
 
-    tmp := big.NewInt(0).Set(diff)
+    tmp := big.NewInt(0).Set(pf)
     pow10 := big.NewInt(0)
 
     for {
@@ -103,7 +100,7 @@ func arithmethic_coding(str string) (*big.Int, *big.Int, map[byte]int64) {
         pow10.Add(pow10, bigOne)
     }
 
-    diff = big.NewInt(0)
+    diff := big.NewInt(0)
     diff.Sub(U, bigOne)
     diff.Div(diff, big.NewInt(0).Exp(bigTen, pow10, nil))
 
