@@ -11,16 +11,16 @@ func (s ByLength) Len() int           { return len(s) }
 func (s ByLength) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
 func (s ByLength) Less(i, j int) bool { return s[i] < s[j] }
 
-type Tree map[rune]*Tree    // a recursive map
+type Tree map[rune]Tree // a recursive map
 
-func traverse(tree *Tree, acc string) string {
-    if len(*tree) == 1 {
+func traverse(tree Tree, acc string) string {
+    if len(tree) == 1 {
         var key rune
-        for k := range *tree {
+        for k := range tree {
             key = k
             break
         }
-        return traverse((*tree)[key], acc+string(key))
+        return traverse(tree[key], acc+string(key))
     }
 
     return acc
@@ -32,25 +32,25 @@ func lcp(strs ...string) string {
     sort.Sort(ByLength(strs))
 
     for _, str := range strs {
-        ref := &tree
+        ref := tree
         if str == "" {
             return ""
         }
         for _, char := range str {
-            if v, ok := (*ref)[char]; ok {
+            if v, ok := ref[char]; ok {
                 ref = v
-                if len(*ref) == 0 {
+                if len(ref) == 0 {
                     break
                 }
             } else {
                 r := make(Tree)
-                (*ref)[char] = &r
-                ref = &r
+                ref[char] = r
+                ref = r
             }
         }
     }
 
-    return traverse(&tree, "")
+    return traverse(tree, "")
 }
 
 func is(a, b string) {
