@@ -15,20 +15,13 @@ import (
     "strings"
 )
 
-func asciibet() [256]byte {
-    r := [256]byte{}
-    for i := 0; i < 256; i++ {
-        r[i] = byte(i)
-    }
-    return r
-}
-
 func cumulative_freq(freq map[byte]int64) map[byte]int64 {
     total := int64(0)
     cf := make(map[byte]int64)
-    for _, c := range asciibet() {
-        if v, ok := freq[c]; ok {
-            cf[c] = total
+    for i := 0; i < 256; i++ {
+        b := byte(i)
+        if v, ok := freq[b]; ok {
+            cf[b] = total
             total += v
         }
     }
@@ -125,7 +118,7 @@ func arithmethic_decoding(num *big.Int, pow *big.Int, freq map[byte]int64) strin
     // Create the dictionary
     dict := make(map[int64]byte)
     for k, v := range cf {
-        dict[v] = k;
+        dict[v] = k
     }
 
     // Fill the gaps in the dictionary
