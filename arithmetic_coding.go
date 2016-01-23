@@ -28,7 +28,7 @@ func cumulative_freq(freq map[byte]int64) map[byte]int64 {
     return cf
 }
 
-func arithmethic_coding(str string) (*big.Int, *big.Int, map[byte]int64) {
+func arithmethic_coding(str string, radix int64) (*big.Int, *big.Int, map[byte]int64) {
 
     // Convert the string into a slice of bytes
     chars := []byte(str)
@@ -80,32 +80,32 @@ func arithmethic_coding(str string) (*big.Int, *big.Int, map[byte]int64) {
 
     bigOne := big.NewInt(1)
     bigZero := big.NewInt(0)
-    bigTen := big.NewInt(10)
+    bigRadix := big.NewInt(radix)
 
     tmp := big.NewInt(0).Set(pf)
-    pow10 := big.NewInt(0)
+    powr := big.NewInt(0)
 
     for {
-        tmp.Div(tmp, bigTen)
+        tmp.Div(tmp, bigRadix)
         if tmp.Cmp(bigZero) == 0 {
             break
         }
-        pow10.Add(pow10, bigOne)
+        powr.Add(powr, bigOne)
     }
 
     diff := big.NewInt(0)
     diff.Sub(U, bigOne)
-    diff.Div(diff, big.NewInt(0).Exp(bigTen, pow10, nil))
+    diff.Div(diff, big.NewInt(0).Exp(bigRadix, powr, nil))
 
-    return diff, pow10, freq
+    return diff, powr, freq
 }
 
-func arithmethic_decoding(num *big.Int, pow *big.Int, freq map[byte]int64) string {
+func arithmethic_decoding(num *big.Int, radix int64, pow *big.Int, freq map[byte]int64) string {
 
-    pow10 := big.NewInt(10)
+    powr := big.NewInt(radix)
 
     enc := big.NewInt(0).Set(num)
-    enc.Mul(enc, pow10.Exp(pow10, pow, nil))
+    enc.Mul(enc, powr.Exp(powr, pow, nil))
 
     base := int64(0)
     for _, v := range freq {
@@ -159,6 +159,9 @@ func arithmethic_decoding(num *big.Int, pow *big.Int, freq map[byte]int64) strin
 }
 
 func main() {
+
+    var radix = int64(2)
+
     strSlice := []string{
         `DABDDB`,
         `DABDDBBDDBA`,
@@ -169,6 +172,7 @@ func main() {
         `Trizen`,
         `Google`,
         `TOBEORNOTTOBEORTOBEORNOT`,
+        `吹吹打打`,
         `In a positional numeral system the radix, or base, is numerically equal to a number of different symbols ` +
             `used to express the number. For example, in the decimal system the number of symbols is 10, namely 0, 1, 2, ` +
             `3, 4, 5, 6, 7, 8, and 9. The radix is used to express any finite integer in a presumed multiplier in polynomial ` +
@@ -176,10 +180,10 @@ func main() {
     }
 
     for _, str := range strSlice {
-        enc, pow, freq := arithmethic_coding(str)
-        dec := arithmethic_decoding(enc, pow, freq)
+        enc, pow, freq := arithmethic_coding(str, radix)
+        dec := arithmethic_decoding(enc, radix, pow, freq)
 
-        fmt.Println("Encoded:", enc)
+        fmt.Printf("Encoded: %s * %d^%s\n", enc, radix, pow)
         fmt.Println("Decoded:", dec)
 
         if str != dec {
