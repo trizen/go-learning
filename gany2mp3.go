@@ -58,7 +58,7 @@ func main() {
 	const outputFormat = "mp3"
 
 	const ffmpegCmd = "ffmpeg"
-	ffmpegArg := []string{"-y", "-vn", "-ac", "2", "-ab", "192K", "-ar", "48000", "-f", outputFormat}
+	ffmpegArg := []string{"-y", "-vn", "-ac", "2", "-ab", "256K", "-ar", "48000", "-f", outputFormat}
 
 	var outputDir string
 	var maxThreads int
