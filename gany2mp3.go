@@ -57,16 +57,18 @@ func main() {
 	const maxFormatLen = 1 + 4 // .webm
 	const outputFormat = "mp3"
 
-	const ffmpegCmd = "ffmpeg"
-	ffmpegArg := []string{"-y", "-vn", "-ac", "2", "-ab", "256K", "-ar", "48000", "-f", outputFormat}
-
 	var outputDir string
 	var maxThreads int
+	var bitrate int
 
 	// Command-line flags
 	flag.StringVar(&outputDir, "o", ".", "put converted files in this directory")
 	flag.IntVar(&maxThreads, "t", 2, "the number of threads used for conversion")
+	flag.IntVar(&bitrate, "b", 192, "audio bitrate")
 	flag.Parse()
+
+	const ffmpegCmd = "ffmpeg"
+	ffmpegArg := []string{"-y", "-vn", "-ac", "2", "-ab", fmt.Sprintf("%dK", bitrate), "-ar", "48000", "-f", outputFormat}
 
 	if flag.NArg() == 0 {
 		fmt.Fprintln(os.Stderr, "error: no input file provided!")
